@@ -27,4 +27,23 @@ def view():
         
     return rows
 
+
+def remove(item):
+    connect = sqlite3.connect("lite.db")
+    cursor = connect.cursor()
+    cursor.execute(
+        "DELETE FROM store WHERE item=?",(item,))
+    connect.commit()
+    connect.close()
+    
+
+def update(quantity, price, item):
+    connect = sqlite3.connect("lite.db")
+    cursor = connect.cursor()
+    cursor.execute(
+        "UPDATE store SET quantity=?, price=? WHERE item=?", (quantity, price, item))
+    connect.commit()
+    connect.close()
+
+update(10, 10.99, 'Wine Glass')
 view()
