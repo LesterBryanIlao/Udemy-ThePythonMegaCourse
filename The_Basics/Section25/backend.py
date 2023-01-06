@@ -50,6 +50,21 @@ def search(title="", author="", year="", isbn=""):
 
     return rows
 
+
+def search_by_id(id):
+    connect = sqlite3.connect("bookstore.db")
+    cursor = connect.cursor()
+    cursor.execute("SELECT * FROM books WHERE id=?",
+                   (id,))
+    rows = cursor.fetchall()
+    connect.close()
+
+    print("\nSearch Result/s \n")
+    for row in rows:
+        print(row)
+
+    return rows
+
 def delete(id):
     connect = sqlite3.connect("bookstore.db")
     cursor = connect.cursor()
