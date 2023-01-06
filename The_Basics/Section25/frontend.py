@@ -6,9 +6,14 @@ def view_command():
 
     list1.delete(0, END)
     try:
-        for book in backend.view():
-            list1.insert(
-                END, f"{book[0]}: '{book[1]}' by {book[2]} - ISBN: {book[3]}")
+        temp_book_list = backend.view()
+        if len(temp_book_list) == 0:
+            list1.insert(END, "No books found! Please add books.")
+
+        else:
+            for book in temp_book_list:
+                list1.insert(
+                    END, f"{book[0]}: '{book[1]}' by {book[2]} - ISBN: {book[3]}")
     except:
         list1.insert(END, "No books found! Please add books.")
 
@@ -35,9 +40,13 @@ def add_entry_command():
     isbn_txt = isbn_text.get().strip()
 
     try:
-        backend.validate_add_entry(title_text, author_txt, year_txt, isbn_txt)
+        backend.validate_add_entry(title_txt, author_txt, year_txt, isbn_txt)
 
-        backend.insert(title_text, author_txt, year_txt, isbn_txt)
+        backend.insert(title_txt, author_txt, year_txt, isbn_txt)
+        e1.delete(0, END)
+        e2.delete(0, END)
+        e3.delete(0, END)
+        e4.delete(0, END)
         list1.insert(END, "Entry successfully addded.")
     except ValueError as e:
         list1.insert(END, e)
