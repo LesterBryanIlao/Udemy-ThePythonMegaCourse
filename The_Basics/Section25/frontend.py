@@ -3,25 +3,17 @@ import backend
 
 
 def view_command():
+
     list1.delete(0, END)
-    for book in backend.view():
-        list1.insert(
-            END, f"{book[0]}: '{book[1]}' by {book[2]} - ISBN: {book[3]}")
+    try:
+        for book in backend.view():
+            list1.insert(
+                END, f"{book[0]}: '{book[1]}' by {book[2]} - ISBN: {book[3]}")
+    except:
+        list1.insert(END, "No books found! Please add books.")
 
 
 def search_command():
-    list1.delete(0, END)
-    temp_book_list = backend.search(
-        title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
-    if len(temp_book_list)==0:
-        list1.insert(END, "Book not found!")
-    
-    else:
-        for book in temp_book_list:
-            list1.insert(END, f"{book[0]}: '{book[1]}' by {book[2]} - ISBN: {book[3]}")
-
-
-def add_command():
     list1.delete(0, END)
     temp_book_list = backend.search(
         title_text.get(), author_text.get(), year_text.get(), isbn_text.get())
@@ -32,8 +24,27 @@ def add_command():
         for book in temp_book_list:
             list1.insert(
                 END, f"{book[0]}: '{book[1]}' by {book[2]} - ISBN: {book[3]}")
-            
+
+
+def add_entry_command():
+    list1.delete(0, END)
+
+    title_txt = title_text.get().strip()
+    author_txt = author_text.get().strip()
+    year_txt = year_text.get().strip()
+    isbn_txt = isbn_text.get().strip()
+
+    try:
+        backend.validate_add_entry(title_text, author_txt, year_txt, isbn_txt)
+
+        backend.insert(title_text, author_txt, year_txt, isbn_txt)
+        list1.insert(END, "Entry successfully addded.")
+    except ValueError as e:
+        list1.insert(END, e)
+
+
 window = Tk()
+backend.connect()
 
 l1 = Label(window, text="Title")
 l1.grid(row=0, column=0)
@@ -78,7 +89,7 @@ b1.grid(row=2, column=3)
 b2 = Button(window, text="Search Entry", width=12, command=search_command)
 b2.grid(row=3, column=3)
 
-b3 = Button(window, text="Add Entry", width=12)
+b3 = Button(window, text="Add Entry", width=12, command=add_entry_command)
 b3.grid(row=4, column=3)
 
 b4 = Button(window, text="Update", width=12)

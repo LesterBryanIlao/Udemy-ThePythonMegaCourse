@@ -65,6 +65,11 @@ def update(id, title, author, year, isbn):
     connect.commit()
     connect.close()
     
+    
+def validate_add_entry(title, author, year, isbn):
+    if title == "" or author == "" or year == "" or isbn == "":
+        raise ValueError("Please provide complete details.")
+    
 # connect()
 # #insert("The Sky", "Doe Doe", 1920, 6545644123)
 # view()
