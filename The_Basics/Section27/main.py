@@ -1,9 +1,12 @@
+from pathlib import Path
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.gridlayout import GridLayout
 import json
 from datetime import datetime
+import random
+import glob
 
 Builder.load_file('design.kv')
 
@@ -18,13 +21,11 @@ class LoginScreen(Screen):
         password = password.strip()
         with open("users.json") as file:
             users = json.load(file)
-        if username in users:
-            if users[username]["password"] == password:
-                self.manager.current = "login_screen_success"
-            else:
-                self.manager.current = "login_screen"
+        if username in users and users[username]["password"] == password:
+            self.manager.current = "login_screen_success"
         else:
-            self.manager.current = "login_screen"
+            # self.manager.current = "login_screen"
+            self.ids.login_wrong.text = "Wrong username or password!"
 
 
 class SignUpScreen(Screen):
@@ -63,6 +64,22 @@ class LoginScreenSuccess(Screen):
     def log_out(self):
         self.manager.transition.direction = "right"
         self.manager.current = "login_screen"
+
+    def random_line(self, filename):
+        with open(f"quotes/{filename}.txt", 'r', encoding='cp850') as f:
+            quote = f.readlines()
+            return random.choice(quote).strip()
+
+    def get_quote(self):
+        feeling_strip = self.ids.feeling.text.strip().lower()
+
+        available_feelings = glob.glob("quotes/*txt")
+
+        available_feelings = [
+            Path(filename).stem for filename in available_feelings]
+
+        self.ids.enlighten_me.text = self.random_line(
+            feeling_strip) if feeling_strip in available_feelings else "Not in the selection. Try again."
 
 
 class RootWidget(ScreenManager):
