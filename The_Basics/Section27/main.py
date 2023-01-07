@@ -13,6 +13,19 @@ class LoginScreen(Screen):
     def sign_up(self):
         self.manager.current = "signup_screen"
 
+    def login(self, username, password):
+        username = username.strip()
+        password = password.strip()
+        with open("users.json") as file:
+            users = json.load(file)
+        if username in users:
+            if users[username]["password"] == password:
+                self.manager.current = "login_screen_success"
+            else:
+                self.manager.current = "login_screen"
+        else:
+            self.manager.current = "login_screen"
+
 
 class SignUpScreen(Screen):
     def submit(self):
@@ -21,7 +34,7 @@ class SignUpScreen(Screen):
     def add_user(self, username, password):
         username = username.strip()
         password = password.strip()
-        
+
         # Read jason file
         with open("users.json") as file:
             users = json.load(file)
@@ -32,6 +45,24 @@ class SignUpScreen(Screen):
         # Rewrite json file
         with open('users.json', 'w') as file:
             json.dump(users, file)
+
+        self.manager.current = "signup_screen_success"
+
+    def cancel(self):
+        self.manager.transition.direction = "right"
+        self.manager.current = "login_screen"
+
+
+class SignUpScreenSuccess(Screen):
+    def go_to_login_page(self):
+        self.manager.transition.direction = "right"
+        self.manager.current = "login_screen"
+
+
+class LoginScreenSuccess(Screen):
+    def log_out(self):
+        self.manager.transition.direction = "right"
+        self.manager.current = "login_screen"
 
 
 class RootWidget(ScreenManager):
