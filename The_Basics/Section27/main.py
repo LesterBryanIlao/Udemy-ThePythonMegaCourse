@@ -3,6 +3,9 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.gridlayout import GridLayout
+from hover.hoverable import HoverBehavior
+from kivy.uix.image import Image
+from kivy.uix.behaviors import ButtonBehavior
 import json
 from datetime import datetime
 import random
@@ -36,18 +39,21 @@ class SignUpScreen(Screen):
         username = username.strip()
         password = password.strip()
 
-        # Read jason file
         with open("users.json") as file:
             users = json.load(file)
+        if username=="" or password=="":
+            self.ids.status.text = "Please provide username and password."
+        elif username in users:
+            self.ids.status.text = "Username already exists."
+        else:# Read jason file
+            users[username] = {"username": username,
+                            "password": password,
+                            "created": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+            # Rewrite json file
+            with open('users.json', 'w') as file:
+                json.dump(users, file)
 
-        users[username] = {"username": username,
-                           "password": password,
-                           "created": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-        # Rewrite json file
-        with open('users.json', 'w') as file:
-            json.dump(users, file)
-
-        self.manager.current = "signup_screen_success"
+            self.manager.current = "signup_screen_success"
 
     def cancel(self):
         self.manager.transition.direction = "right"
@@ -81,6 +87,9 @@ class LoginScreenSuccess(Screen):
         self.ids.enlighten_me.text = self.random_line(
             feeling_strip) if feeling_strip in available_feelings else "Not in the selection. Try again."
 
+
+class ImageButton(ButtonBehavior, HoverBehavior, Image):
+    pass
 
 class RootWidget(ScreenManager):
     pass
