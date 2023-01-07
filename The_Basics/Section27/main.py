@@ -21,14 +21,18 @@ class SignUpScreen(Screen):
     def add_user(self, username, password):
         username = username.strip()
         password = password.strip()
+        
+        # Read jason file
         with open("users.json") as file:
             users = json.load(file)
-        print(users)
 
         users[username] = {"username": username,
-                           "password": password, 
+                           "password": password,
                            "created": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-        print(users)
+        # Rewrite json file
+        with open('users.json', 'w') as file:
+            json.dump(users, file)
+
 
 class RootWidget(ScreenManager):
     pass
