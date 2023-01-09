@@ -25,42 +25,42 @@ def index():
     return render_template('index.html')
 
 
-# @app.route('/success', methods=['POST'])
-# def success():
-#     if request.method == 'POST':
-#         email = request.form["email_name"]
-#         height = round(float(request.form["height_name"]),1)
-        
-#         if db.session.query(Data).filter(Data.email_ == email).count() == 0:
-#             data = Data(email, height)
-#             db.session.add(data)
-#             db.session.commit()
-
-#             avg_height = db.session.query(func.avg(Data.height_)).scalar()
-#             avg_height = round(avg_height, 1)
-
-#             count = db.session.query(Data.height_).count()
-#             send_email(email, height, avg_height, count)
-#             return render_template('success.html')
-
-#     return render_template('index.html', text="Email already provided a response.")
-
-
 @app.route('/success', methods=['POST'])
 def success():
-    global file
     if request.method == 'POST':
-        file = request.files["file"]
-        file.save(secure_filename("uploaded"+file.filename))
-        with open("uploaded"+file.filename, "a") as f:
-            f.write("I added this.")
-        return render_template('index.html')
+        email = request.form["email_name"]
+        height = round(float(request.form["height_name"]),1)
+        
+        if db.session.query(Data).filter(Data.email_ == email).count() == 0:
+            data = Data(email, height)
+            db.session.add(data)
+            db.session.commit()
 
-    return render_template('index.html', btn="download.html")
+            avg_height = db.session.query(func.avg(Data.height_)).scalar()
+            avg_height = round(avg_height, 1)
 
-@app.route('/download')
-def download():
-    return send_file("uploaded"+file.filename, attachment_filename="yourfile.csv", as_attachment=True)
+            count = db.session.query(Data.height_).count()
+            send_email(email, height, avg_height, count)
+            return render_template('success.html')
+
+    return render_template('index.html', text="Email already provided a response.")
+
+
+# @app.route('/success', methods=['POST'])
+# def success():
+#     global file
+#     if request.method == 'POST':
+#         file = request.files["file"]
+#         file.save(secure_filename("uploaded"+file.filename))
+#         with open("uploaded"+file.filename, "a") as f:
+#             f.write("I added this.")
+#         return render_template('index.html')
+
+#     return render_template('index.html', btn="download.html")
+
+# @app.route('/download')
+# def download():
+#     return send_file("uploaded"+file.filename, attachment_filename="yourfile.csv", as_attachment=True)
 
 if __name__ == '__main__':
     app.run(debug=True)

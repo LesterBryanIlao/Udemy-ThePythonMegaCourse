@@ -17,7 +17,7 @@
         {{ text | safe}}
       </div>
       <form action="{{url_for('success')}}" method="POST" enctype="multipart/form-data">
-        <!-- <input
+        <input
           title="Your email will be safe with us."
           placeholder="Enter your email address."
           type="email"
@@ -35,11 +35,11 @@
           name="height_name"
           required
         />
-        <br /> -->
-        <input type="file" name="file" required> <!-- remove this after -->
+        <br />
+        <!-- <input type="file" name="file" required> remove this after -->
         <button type="submit"> Submit </button>
       </form>
-      {% include [btn] ignore missing %} <!-- remove this after -->
+      <!-- {% include [btn] ignore missing %} remove this after -->
     </div>
   </body>
 </html>
