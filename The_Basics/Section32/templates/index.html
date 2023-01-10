@@ -19,10 +19,10 @@
                     {{post.title}}
                 </h2>
                 <p class="card-text">
-                    {{post.content}}
+                    {{post.content|slice:":50"}}...
                 </p>
                 <p class="card-text">
-                    by: {{post.author}}
+                    by: {{post.author|title}}
                 </p>
                 <a class="btn btn-primary" href="{% url 'blog_view' post.slug %}">Read more</a>
             </div>
