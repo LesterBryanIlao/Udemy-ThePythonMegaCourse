@@ -7,4 +7,3 @@ urlpatterns = [
     path('about/', views.AboutView.as_view(), name='about_view'),
     path('', views.PostList.as_view(), name='home'),
 ]
-
