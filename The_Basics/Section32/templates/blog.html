@@ -1,17 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog App</title>
-</head>
-
-<body>
-    <h1>{% block blog_title %} {{object.title}} {% endblock blog_title %}</h1>
-    <p>{% block blog_content %} {{object.content}} {% endblock blog_content %}</p>
-    <p>by: {% block blog_author %} {{object.author}} {% endblock blog_author %}</p>
-</body>
-
-</html>
+{% block content %}
+<h1>{% block blog_title %} {{object.title}} {% endblock blog_title %}</h1>
+<p>{% block blog_content %} {{object.content}} {% endblock blog_content %}</p>
+<p>by: {% block blog_author %} {{object.author}} {% endblock blog_author %}</p>
+{% endblock %}
