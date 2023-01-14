@@ -11,13 +11,18 @@ class Dictionary:
         word = word.lower().strip()
         if word in self.data:
             return self.stringFormat(word, self.selectFromMultipleMeaning(self.data[word]))
+        elif word.title() in self.data:
+            return self.stringFormat(word, self.selectFromMultipleMeaning(self.data[word.title()]))
         elif len(get_close_matches(word, self.data.keys())) > 0:
             # new_word, meaning = self.selectFromMultipleCloseMatches(word)
             # meaning = self.selectFromMultipleMeaning(meaning)
             # return f"{new_word}: {meaning}"
-
             new_word = get_close_matches(word, self.data.keys())[0]
-            return self.stringFormat(new_word, self.selectFromMultipleMeaning(self.data[new_word]))
+            str1 = f"Did you mean '{new_word}'?\n"
+            str2 = self.stringFormat(
+                new_word, self.selectFromMultipleMeaning(self.data[new_word]))
+            
+            return str1+str2
 
         else:
             return "Word not found."
@@ -43,4 +48,4 @@ class Dictionary:
 
 
 d = Dictionary('data.json')
-print(d.lookup('shit'))
+print(d.lookup('Delhi'))
